@@ -1,15 +1,15 @@
-import React, { useState } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import CardHeader from '@material-ui/core/CardHeader'
-import Avatar from '@material-ui/core/Avatar'
-import axios from 'axios'
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   root: {
@@ -18,91 +18,99 @@ const useStyles = makeStyles({
   media: {
     height: 140,
   },
-})
+});
 
 const Home = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const [gifState, setGifState] = useState({
+  const [bookState, setBookState] = useState({
     search: '',
-    gifs: []
-  })
+    books: [],
+  });
 
-  gifState.handleInputChange = event => {
-    setGifState({ ...gifState, [event.target.name]: event.target.value })
-  }
+  bookState.handleInputChange = (event) => {
+    setBookState({ ...bookState, [event.target.name]: event.target.value });
+  };
 
-  gifState.handleSearchGif = event => {
-    event.preventDefault()
-    axios.get(`/api/giphy/${gifState.search}`)
+  bookState.handleSearchBook = (event) => {
+    event.preventDefault();
+    axios
+      .get(`/api/books/${bookState.search}`)
       .then(({ data }) => {
-        console.log(data)
-        setGifState({ ...gifState, gifs: data })
+        console.log(data);
+        setBookState({ ...bookState, books: data });
       })
-      .catch(err => console.error(err))
-  }
+      .catch((err) => console.error(err));
+  };
 
-  gifState.handleSaveGif = gif => {
-    axios.post('/api/gifs', {
-      title: gif.title,
-      source: gif.images.original.url,
-      url: gif.url,
-      author: gif.username,
-      gifId: gif.id
-    })
-      .then(() => {
-        const gifs = gifState.gifs
-        const gifsFiltered = gifs.filter(giph => giph.id !== gif.id)
-        setGifState({ ...gifState, gifs: gifsFiltered })
+  bookState.handleSaveBook = (book) => {
+    axios
+      .post('/api/books', {
+        title: book.volumeInfo.title,
+        author: book.volumeInfo.authors[0],
+        description: book.volumeInfo.description,
+        image: book.volumeInfo.imageLinks.smallThumbnail,
+        link: book.volumeInfo.previewLink,
+        bookId: book.id,
       })
-      .catch(err => console.error(err))
-  }
+      .then(() => {
+        const books = bookState.books;
+        const gifsFiltered = books.filter((googleBook) => googleBook.id !== book.id);
+        setBookState({ ...bookState, books: gifsFiltered });
+      })
+      .catch((err) => console.error(err));
+  };
 
   return (
     <>
-      <form onSubmit={gifState.handleSearchGif}>
+      <form onSubmit={bookState.handleSearchBook}>
         <TextField
-          label="Search Giphy"
-          name="search"
-          value={gifState.search}
-          onChange={gifState.handleInputChange} />
+          label='Search Book Title'
+          name='search'
+          value={bookState.search}
+          onChange={bookState.handleInputChange}
+        />
         <Button
-          variant="outlined"
-          color="primary"
-          onClick={gifState.handleSearchGif}>
+          variant='outlined'
+          color='primary'
+          onClick={bookState.handleSearchBook}
+        >
           Search
         </Button>
       </form>
       <div>
-        {
-          gifState.gifs.map(gif => (
-            <Card className={classes.root}>
-              <CardHeader
-                title={gif.title}
-                subheader={gif.username.length ? `Created by ${gif.username}` : 'Creator unknown'}
-              />
-                <CardMedia
-                  className={classes.media}
-                  image={gif.images.original.url}
-                  title={gif.title}
-                />
-              <CardActions>
-                <Button 
-                  size="small" 
-                  color="primary"
-                  onClick={() => gifState.handleSaveGif(gif)}>
-                  Save
-                </Button>
-                <Button size="small" color="primary" href={gif.url}>
-                  View
-                </Button>
-              </CardActions>
-            </Card>
-          ))
-        }
+        {bookState.books.map((book) => (
+          <Card className={classes.root}>
+            <CardHeader
+              title={book.title}
+              subheader={
+                book.username.length
+                  ? `Created by ${book.username}`
+                  : 'Creator unknown'
+              }
+            />
+            <CardMedia
+              className={classes.media}
+              image={book.images.original.url}
+              title={book.title}
+            />
+            <CardActions>
+              <Button
+                size='small'
+                color='primary'
+                onClick={() => bookState.handleSaveBook(book)}
+              >
+                Save
+              </Button>
+              <Button size='small' color='primary' href={book.url}>
+                View
+              </Button>
+            </CardActions>
+          </Card>
+        ))}
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Home
+export default Home;

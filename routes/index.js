@@ -1,6 +1,6 @@
-const router = require('express').Router()
+const router = require('express').Router();
 
-router.use('/api', require('./gifRoutes.js'))
-router.use('/api', require('./giphyRoutes.js'))
+router.use('/api', require('./apiRoutes'));
+router.use('/api', require('./bookRoutes'));
 
-module.exports = router
+module.exports = router;

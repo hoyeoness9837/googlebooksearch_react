@@ -1,5 +1,5 @@
 {
-  "name": "merngiphy",
+  "name": "googlebooksearch_react",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -14,15 +14,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/QFults/merngiphy.git"
+    "url": "git+https://github.com/hoyeoness9837/googlebooksearch_react.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/QFults/merngiphy/issues"
+    "url": "https://github.com/hoyeoness9837/googlebooksearch_react/issues"
   },
-  "homepage": "https://github.com/QFults/merngiphy#readme",
+  "homepage": "https://github.com/hoyeoness9837/googlebooksearch_react#readme",
   "dependencies": {
     "axios": "^0.19.2",
     "concurrently": "^5.2.0",

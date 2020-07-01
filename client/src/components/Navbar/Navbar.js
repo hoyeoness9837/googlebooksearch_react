@@ -35,11 +35,11 @@ const Navbar = () => {
           </IconButton>
           <Typography variant="h6" className={classes.title}>
             <Link to="/" className={classes.link}>
-              Giphy App
+              Google Books App
             </Link>
           </Typography>
           <Link to="/" className={classes.link}>
-            <Button color="inherit">Home</Button>
+            <Button color="inherit">Search</Button>
           </Link>
           <Link to="/saved" className={classes.link}>
             <Button color="inherit" >Saved</Button>
