@@ -55,7 +55,9 @@ const Home = () => {
       })
       .then(() => {
         const books = bookState.books;
-        const gifsFiltered = books.filter((googleBook) => googleBook.id !== book.id);
+        const gifsFiltered = books.filter(
+          (googleBook) => googleBook.id !== book.id
+        );
         setBookState({ ...bookState, books: gifsFiltered });
       })
       .catch((err) => console.error(err));
@@ -98,7 +100,11 @@ const Home = () => {
               >
                 Save
               </Button>
-              <Button size='small' color='primary' href={book.volumeInfo.previewLink}>
+              <Button
+                size='small'
+                color='primary'
+                href={book.volumeInfo.previewLink}
+              >
                 View
               </Button>
             </CardActions>

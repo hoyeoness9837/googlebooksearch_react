@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react'
-import { makeStyles } from '@material-ui/core/styles'
-import TextField from '@material-ui/core/TextField'
-import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
-import CardContent from '@material-ui/core/CardContent'
-import CardMedia from '@material-ui/core/CardMedia'
-import Button from '@material-ui/core/Button'
-import Typography from '@material-ui/core/Typography'
-import CardHeader from '@material-ui/core/CardHeader'
-import Avatar from '@material-ui/core/Avatar'
-import axios from 'axios'
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import CardMedia from '@material-ui/core/CardMedia';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import CardHeader from '@material-ui/core/CardHeader';
+import Avatar from '@material-ui/core/Avatar';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   root: {
@@ -18,60 +18,70 @@ const useStyles = makeStyles({
   media: {
     height: 140,
   },
-})
+});
 
 const Saved = () => {
-  const classes = useStyles()
+  const classes = useStyles();
 
-  const [gifState, setGifState] = useState({
-    gifs: []
-  })
+  const [bookState, setBookState] = useState({
+    books: [],
+  });
 
-  gifState.handleDeleteGif = gif => {
-    axios.delete(`/api/gifs/${gif._id}`)
+  bookState.handleDeleteGif = (book) => {
+    axios
+      .delete(`/api/books/${book._id}`)
       .then(() => {
-        const gifs = JSON.parse(JSON.stringify(gifState.gifs))
-        const gifsFiltered = gifs.filter(giph => giph._id !== gif._id)
-        setGifState({ ...gifState, gifs: gifsFiltered })
+        const books = JSON.parse(JSON.stringify(bookState.books));
+        const booksFiltered = books.filter(
+          (googleBook) => googleBook._id !== book._id
+        );
+        setBookState({ ...bookState, books: booksFiltered });
       })
-      .catch(err => console.error(err))
-  }
+      .catch((err) => console.error(err));
+  };
 
   useEffect(() => {
-    axios.get('/api/gifs')
+    axios
+      .get('/api/books')
       .then(({ data }) => {
-        setGifState({ ...gifState, gifs: data })
+        setBookState({ ...bookState, books: data });
       })
-      .catch(err => console.error(err))
-  }, [])
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <div>
-      {
-        gifState.gifs.map(gif => (
-          <Card className={classes.root}>
-            <CardHeader
-              title={gif.title}
-              subheader={gif.author.length ? `Created by ${gif.author}` : 'Creator unknown'}
-            />
-            <CardMedia
-              className={classes.media}
-              image={gif.source}
-              title={gif.title}
-            />
-            <CardActions>
-              <Button 
-                size="small" 
-                color="secondary"
-                onClick={() => gifState.handleDeleteGif(gif)}>
-                Delete
-                </Button>
-            </CardActions>
-          </Card>
-        ))
-      }
+      {bookState.books.map((book) => (
+        <Card className={classes.root}>
+          <CardHeader
+            title={book.volumeInfo.title}
+            subheader={`Written by ${book.volumeInfo.authors[0]}`}
+          />
+          <CardMedia
+            className={classes.media}
+            image={book.volumeInfo.imageLinks.smallThumbnail}
+            title={book.volumeInfo.title}
+          />
+          <CardActions>
+            <Button
+              size='small'
+              color='secondary'
+              onClick={() => bookState.handleDeleteGif(book)}
+            >
+              Delete
+            </Button>
+            <Button
+              size='small'
+              color='primary'
+              href={book.volumeInfo.previewLink}
+            >
+              View
+            </Button>
+          </CardActions>
+        </Card>
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default Saved
+export default Saved;
