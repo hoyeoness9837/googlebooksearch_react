@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const axios = require('axios');
-const { Book } = require('../models');
+const  Book  = require('../models/Book');
 
 router.get('/books/:search', (req, res) => {
   axios

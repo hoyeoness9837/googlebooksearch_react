@@ -13,10 +13,16 @@ import axios from 'axios';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    display: 'flex',
+    width: 'fitContent',
+    border: '1px solid green',
+    margin: '10px 10px',
+    backgroundSize: 'auto',
   },
   media: {
-    height: 140,
+    margin: 'auto',
+    width: '20vw',
+    height: '10vh',
   },
 });
 
@@ -27,7 +33,16 @@ const Saved = () => {
     books: [],
   });
 
-  bookState.handleDeleteGif = (book) => {
+  useEffect(() => {
+    axios
+      .get('/api/books')
+      .then(({ data }) => {
+        setBookState({ ...bookState, books: data });
+      })
+      .catch((err) => console.error(err));
+  }, []);
+
+  bookState.handleDeleteBook = (book) => {
     axios
       .delete(`/api/books/${book._id}`)
       .then(() => {
@@ -40,41 +55,31 @@ const Saved = () => {
       .catch((err) => console.error(err));
   };
 
-  useEffect(() => {
-    axios
-      .get('/api/books')
-      .then(({ data }) => {
-        setBookState({ ...bookState, books: data });
-      })
-      .catch((err) => console.error(err));
-  }, []);
-
   return (
     <div>
       {bookState.books.map((book) => (
         <Card className={classes.root}>
           <CardHeader
-            title={book.volumeInfo.title}
-            subheader={`Written by ${book.volumeInfo.authors[0]}`}
+            title={book.title}
+            subheader={`Written by ${book.authors}`}
           />
           <CardMedia
+            style={{
+              backgroundSize: 'auto',
+            }}
             className={classes.media}
-            image={book.volumeInfo.imageLinks.smallThumbnail}
-            title={book.volumeInfo.title}
+            image={book.image}
+            title={book.title}
           />
           <CardActions>
             <Button
               size='small'
               color='secondary'
-              onClick={() => bookState.handleDeleteGif(book)}
+              onClick={() => bookState.handleDeleteBook(book)}
             >
               Delete
             </Button>
-            <Button
-              size='small'
-              color='primary'
-              href={book.volumeInfo.previewLink}
-            >
+            <Button size='small' color='primary' href={book.link}>
               View
             </Button>
           </CardActions>

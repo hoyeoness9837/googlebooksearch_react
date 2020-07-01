@@ -10,13 +10,20 @@ import Typography from '@material-ui/core/Typography';
 import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
 import axios from 'axios';
+import { FormHelperText } from '@material-ui/core';
 
 const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
+    display: 'flex',
+    width: 'fitContent',
+    border: '1px solid green',
+    margin: '10px 10px',
+    backgroundSize: 'auto',
   },
   media: {
-    height: 140,
+    margin: 'auto',
+    width: '20vw',
+    height: '10vh',
   },
 });
 
@@ -88,8 +95,10 @@ const Home = () => {
               subheader={`Written by ${book.volumeInfo.authors[0]}`}
             />
             <CardMedia
+              style={{
+                backgroundSize: 'auto'}}
               className={classes.media}
-              image={book.volumeInfo.imageLinks.smallThumbnail}
+              image={book.volumeInfo.imageLinks.smallThumbnail} 
               title={book.volumeInfo.title}
             />
             <CardActions>
