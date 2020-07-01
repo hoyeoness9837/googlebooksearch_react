@@ -82,17 +82,13 @@ const Home = () => {
         {bookState.books.map((book) => (
           <Card className={classes.root}>
             <CardHeader
-              title={book.title}
-              subheader={
-                book.username.length
-                  ? `Created by ${book.username}`
-                  : 'Creator unknown'
-              }
+              title={book.volumeInfo.title}
+              subheader={`Written by ${book.volumeInfo.authors[0]}`}
             />
             <CardMedia
               className={classes.media}
-              image={book.images.original.url}
-              title={book.title}
+              image={book.volumeInfo.imageLinks.smallThumbnail}
+              title={book.volumeInfo.title}
             />
             <CardActions>
               <Button
@@ -102,7 +98,7 @@ const Home = () => {
               >
                 Save
               </Button>
-              <Button size='small' color='primary' href={book.url}>
+              <Button size='small' color='primary' href={book.volumeInfo.previewLink}>
                 View
               </Button>
             </CardActions>
