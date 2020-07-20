@@ -27,4 +27,4 @@
 
 ## Deployed URL by Heroku
 
-- [https://arrogant-leaf-07616.herokuapp.com](https://arrogant-leaf-07616.herokuapp.com)
+- [https://hw-googlebookapp.herokuapp.com/](https://hw-googlebookapp.herokuapp.com/)
