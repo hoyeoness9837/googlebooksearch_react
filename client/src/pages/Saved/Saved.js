@@ -1,28 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import axios from 'axios';
+import './saved.css'
 
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    width: 'fitContent',
-    border: '1px solid green',
     margin: '10px 10px',
-    backgroundSize: 'auto',
   },
   media: {
-    margin: 'auto',
-    width: '20vw',
-    height: '10vh',
+    width: '100%',
+    height: '20vh',
   },
 });
 
@@ -42,8 +35,8 @@ const Saved = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  bookState.handleDeleteBook = (book) => {
-    axios
+  bookState.handleDeleteBook = async (book) => {
+    await axios
       .delete(`/api/books/${book._id}`)
       .then(() => {
         const books = JSON.parse(JSON.stringify(bookState.books));
@@ -56,12 +49,12 @@ const Saved = () => {
   };
 
   return (
-    <div>
+    <section className='search_results'>
       {bookState.books.map((book) => (
         <Card className={classes.root}>
           <CardHeader
             title={book.title}
-            subheader={`Written by ${book.authors}`}
+            subheader={`Written by ${book.author}`}
           />
           <CardMedia
             style={{
@@ -77,7 +70,7 @@ const Saved = () => {
               color='secondary'
               onClick={() => bookState.handleDeleteBook(book)}
             >
-              Delete
+              UnSave
             </Button>
             <Button size='small' color='primary' href={book.link}>
               View
@@ -85,7 +78,7 @@ const Saved = () => {
           </CardActions>
         </Card>
       ))}
-    </div>
+    </section>
   );
 };
 

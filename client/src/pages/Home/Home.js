@@ -3,33 +3,25 @@ import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
 import axios from 'axios';
-import { FormHelperText } from '@material-ui/core';
+import './home.css';
 
 const useStyles = makeStyles({
   root: {
     display: 'flex',
-    width: 'fitContent',
-    border: '1px solid green',
     margin: '10px 10px',
-    backgroundSize: 'auto',
   },
   media: {
-    margin: 'auto',
-    width: '20vw',
-    height: '10vh',
+    width: '100%',
+    height: '20vh',
   },
 });
 
 const Home = () => {
   const classes = useStyles();
-
   const [bookState, setBookState] = useState({
     search: '',
     books: [],
@@ -39,40 +31,45 @@ const Home = () => {
     setBookState({ ...bookState, [event.target.name]: event.target.value });
   };
 
-  bookState.handleSearchBook = (event) => {
+  bookState.handleSearchBook = async (event) => {
     event.preventDefault();
-    axios
-      .get(`/api/books/${bookState.search}`)
-      .then(({ data }) => {
-        console.log(data);
-        setBookState({ ...bookState, books: data });
-      })
-      .catch((err) => console.error(err));
+    if (bookState.search.length > 0) {
+      await axios
+        .get(`/api/books/${bookState.search}`)
+        .then(({ data }) => {
+          setBookState({ ...bookState, books: data });
+        })
+        .catch((err) => console.error(err));
+    }
   };
 
-  bookState.handleSaveBook = (book) => {
-    axios
+  bookState.handleSaveBook = async (book) => {
+    await axios
       .post('/api/books', {
         title: book.volumeInfo.title,
-        author: book.volumeInfo.authors[0],
+        author: JSON.stringify(
+          book.volumeInfo.authors && book.volumeInfo.authors[0]
+        ),
         description: book.volumeInfo.description,
-        image: book.volumeInfo.imageLinks.smallThumbnail,
+        image:
+          book.volumeInfo.imageLinks &&
+          book.volumeInfo.imageLinks.smallThumbnail,
         link: book.volumeInfo.previewLink,
         bookId: book.id,
       })
       .then(() => {
         const books = bookState.books;
-        const gifsFiltered = books.filter(
+        const booksFiltered = books.filter(
           (googleBook) => googleBook.id !== book.id
         );
-        setBookState({ ...bookState, books: gifsFiltered });
+        setBookState({ ...bookState, books: booksFiltered });
       })
       .catch((err) => console.error(err));
   };
 
   return (
     <>
-      <form onSubmit={bookState.handleSearchBook}>
+      <form className='home__searh__form' onSubmit={bookState.handleSearchBook}>
         <TextField
           label='Search Book Title'
           name='search'
@@ -87,24 +84,31 @@ const Home = () => {
           Search
         </Button>
       </form>
-      <div>
+      <section className='search_results'>
         {bookState.books.map((book) => (
           <Card className={classes.root}>
             <CardHeader
               title={book.volumeInfo.title}
-              subheader={`Written by ${book.volumeInfo.authors[0]}`}
+              subheader={`Written by ${
+                book.volumeInfo.authors &&
+                JSON.stringify(book.volumeInfo.authors[0])
+              }`}
             />
             <CardMedia
               style={{
-                backgroundSize: 'auto'}}
+                backgroundSize: 'auto',
+              }}
               className={classes.media}
-              image={book.volumeInfo.imageLinks.smallThumbnail} 
+              image={
+                book.volumeInfo.imageLinks &&
+                book.volumeInfo.imageLinks.smallThumbnail
+              }
               title={book.volumeInfo.title}
             />
             <CardActions>
               <Button
                 size='small'
-                color='primary'
+                color='secondary'
                 onClick={() => bookState.handleSaveBook(book)}
               >
                 Save
@@ -119,7 +123,7 @@ const Home = () => {
             </CardActions>
           </Card>
         ))}
-      </div>
+      </section>
     </>
   );
 };

@@ -1,0 +1,70 @@
+.home__searh__form {
+  display: flex;
+  box-sizing: border-box;
+  padding: 10px;
+  width: 50%;
+  margin: auto;
+  margin-top: 30px;
+  box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.28);
+  border-radius: 22px;
+  line-height: 50px;
+  height: 50px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.MuiInputBase-input {
+  padding-bottom: 22px !important;
+  padding-left: 22px !important;
+}
+
+.MuiButton-outlinedPrimary {
+  border: none !important;
+}
+
+.MuiInput-underline::before,
+.MuiInput-underline::after {
+  border-bottom: none !important;
+}
+
+.search_results {
+  position: absolute;
+  width: 100vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.MuiButton-label {
+  font-size: 1rem;
+}
+
+.MuiPaper-root {
+  display: flex;
+  flex-direction: column;
+  width: 15rem;
+  box-shadow: 4px 4px 4px #778899 !important;
+}
+
+.MuiCardMedia-root {
+  margin: auto;
+  background-size: contain !important;
+  width: 8rem;
+  height: 12rem;
+}
+
+.makeStyles-media-6 {
+  height: auto;
+}
+
+.MuiCardActions-root {
+  justify-content: center;
+}
+
+.MuiCardHeader-root {
+  height: 10em;
+  margin-bottom: 10px;
+  padding: 0px!important;
+  border-bottom: 1px solid #778899;
+}

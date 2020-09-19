@@ -1,0 +1,37 @@
+.search_results {
+  position: absolute;
+  width: 100vw;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.MuiButton-label {
+  font-size: 1rem;
+}
+
+.MuiPaper-root {
+  padding: 10px;
+  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  width: 15rem;
+  box-shadow: 4px 4px 4px #778899 !important;
+}
+
+.MuiCardMedia-root {
+  margin: auto;
+  background-size: contain !important;
+  width: 8rem;
+  height: 12rem;
+}
+
+.makeStyles-media-6 {
+  height: auto;
+}
+
+.MuiCardActions-root {
+  justify-content: center;
+}
