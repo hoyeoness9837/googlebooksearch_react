@@ -8,7 +8,7 @@
 - Go to the following deployed link and enjoy this app! or clone the code from the repository and start it with type in 'npm install' in the root terminal.
 
 ## Deployed URL by Heroku
-- [https://hyk-googlebookapp.herokuapp.com/](https://hyk-googlebookapp.herokuapp.com/)
+- [https://hw-googlebookapp.herokuapp.com/](https://hw-googlebookapp.herokuapp.com/)
 
 ## Technologies Included
 - HTML, CSS, JavaScript
