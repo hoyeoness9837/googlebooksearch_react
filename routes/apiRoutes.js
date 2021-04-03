@@ -1,8 +1,8 @@
-const router = require('express').Router();
-const axios = require('axios');
-const  Book  = require('../models/Book');
+const router = require("express").Router();
+const axios = require("axios");
+const Book = require("../models/Book");
 
-router.get('/books/:search', (req, res) => {
+router.get("/books/:search", (req, res) => {
   axios
     .get(
       `https://www.googleapis.com/books/v1/volumes?q=${req.params.search}&printType=books&maxResults=10&key=${process.env.REACT_APP_GOOGLE_API_KEY}`

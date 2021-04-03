@@ -33,7 +33,7 @@ const Saved = () => {
         setBookState({ ...bookState, books: data });
       })
       .catch((err) => console.error(err));
-  }, []);
+  }, [bookState]);
 
   bookState.handleDeleteBook = async (book) => {
     await axios
@@ -72,7 +72,7 @@ const Saved = () => {
             >
               UnSave
             </Button>
-            <Button size='small' color='primary' href={book.link}>
+            <Button size='small' color='primary' href={book.link} target="_blank">
               View
             </Button>
           </CardActions>
