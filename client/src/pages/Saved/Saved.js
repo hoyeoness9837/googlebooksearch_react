@@ -76,7 +76,10 @@ const Saved = () => {
               UnSave
             </Button>
             <Button size="small" color="secondary">
-              <Link href={book.volumeInfo.previewLink} target="_blank">
+              <Link
+                href={book.volumeInfo && book.volumeInfo.previewLink}
+                target="_blank"
+              >
                 View
               </Link>
             </Button>
