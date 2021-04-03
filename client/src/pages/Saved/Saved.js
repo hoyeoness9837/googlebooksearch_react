@@ -1,21 +1,24 @@
-import React, { useState, useEffect } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import CardHeader from '@material-ui/core/CardHeader';
-import axios from 'axios';
-import './saved.css'
+import React, { useState, useEffect } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import {
+  Card,
+  CardActions,
+  CardMedia,
+  Button,
+  CardHeader,
+  Link,
+} from "@material-ui/core";
+import axios from "axios";
+import "./saved.css";
 
 const useStyles = makeStyles({
   root: {
-    display: 'flex',
-    margin: '10px 10px',
+    display: "flex",
+    margin: "10px 10px",
   },
   media: {
-    width: '100%',
-    height: '20vh',
+    width: "100%",
+    height: "20vh",
   },
 });
 
@@ -28,7 +31,7 @@ const Saved = () => {
 
   useEffect(() => {
     axios
-      .get('/api/books')
+      .get("/api/books")
       .then(({ data }) => {
         setBookState({ ...bookState, books: data });
       })
@@ -49,7 +52,7 @@ const Saved = () => {
   };
 
   return (
-    <section className='search_results'>
+    <section className="search_results">
       {bookState.books.map((book) => (
         <Card className={classes.root}>
           <CardHeader
@@ -58,7 +61,7 @@ const Saved = () => {
           />
           <CardMedia
             style={{
-              backgroundSize: 'auto',
+              backgroundSize: "auto",
             }}
             className={classes.media}
             image={book.image}
@@ -66,14 +69,16 @@ const Saved = () => {
           />
           <CardActions>
             <Button
-              size='small'
-              color='secondary'
+              size="small"
+              color="secondary"
               onClick={() => bookState.handleDeleteBook(book)}
             >
               UnSave
             </Button>
-            <Button size='small' color='primary' href={book.link} target="_blank">
-              View
+            <Button size="small" color="secondary">
+              <Link href={book.volumeInfo.previewLink} target="_blank">
+                View
+              </Link>
             </Button>
           </CardActions>
         </Card>
