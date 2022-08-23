@@ -88,8 +88,8 @@ const Home = () => {
         </Button>
       </form>
       <section className="search_results">
-        {bookState.books.map((book) => (
-          <Card className={classes.root}>
+        {bookState.books.map((book,index) => (
+          <Card className={classes.root} key={index}>
             <CardHeader
               title={book.volumeInfo.title}
               subheader={`Written by ${
