@@ -8,16 +8,16 @@
 - Go to the following deployed link and enjoy this app! or clone the code from the repository and start it with type in 'npm install' in the root terminal.
 
 ## Deployed URL by Heroku
-- [https://hw-googlebookapp.herokuapp.com/](https://hw-googlebookapp.herokuapp.com/)
+- [https://react-booksearch-google.herokuapp.com/](https://react-booksearch-google.herokuapp.com/)
 
 ## Technologies Included
 - HTML, CSS, JavaScript
-- React
-- Material ui
+- React.js
+- Material UI
 - Node.js
 - Express.js
 - MongoDB & Mongoose
-- Heroku & mLab(will be altered to Atlas)
+- Heroku
 
 ## Github Repo
 - [https://github.com/hoyeoness9837/googlebooksearch_react](https://github.com/hoyeoness9837/googlebooksearch_react)
