@@ -1,11 +1,12 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { makeStyles } from '@material-ui/core/styles'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import Typography from '@material-ui/core/Typography'
-import Button from '@material-ui/core/Button'
-import './navbar.css'
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { Favorite, Search } from '@material-ui/icons';
+import './navbar.css';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,31 +20,37 @@ const useStyles = makeStyles((theme) => ({
   },
   link: {
     textDecoration: 'none',
-    color: 'inherit'
-  }
-}))
+    color: 'inherit',
+  },
+}));
 
 const Navbar = () => {
-  const classes = useStyles()
+  const classes = useStyles();
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position='static'>
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
-            <Link to="/" className={classes.link}>
-              Google Books App
+          <Typography variant='h6' className={classes.title}>
+            <Link to='/' className={classes.link}>
+              Google Books Search
             </Link>
           </Typography>
-          <Link to="/" className={classes.link}>
-            <Button color="inherit">Search</Button>
+          <Link to='/' className={classes.link}>
+            <Button color='inherit'>
+              <Search />
+              Search
+            </Button>
           </Link>
-          <Link to="/saved" className={classes.link}>
-            <Button color="inherit" >Saved</Button>
+          <Link to='/saved' className={classes.link}>
+            <Button color='inherit'>
+              <Favorite />
+              Saved
+            </Button>
           </Link>
         </Toolbar>
       </AppBar>
     </div>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

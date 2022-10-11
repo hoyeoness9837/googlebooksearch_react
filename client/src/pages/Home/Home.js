@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Button,
   Card,
@@ -8,25 +8,30 @@ import {
   CardActions,
   TextField,
   Link,
-} from "@material-ui/core";
-import axios from "axios";
-import "./home.css";
+} from '@material-ui/core';
+import { Favorite } from '@material-ui/icons';
+import axios from 'axios';
+import './home.css';
 
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    margin: "10px 10px",
+    display: 'flex',
+    margin: '10px 10px',
   },
   media: {
-    width: "100%",
-    height: "20vh",
+    width: '100%',
+    height: '20vh',
   },
 });
+
+let trimString = function (string, length) {
+  return string.length > length ? string.substring(0, length) + '...' : string;
+};
 
 const Home = () => {
   const classes = useStyles();
   const [bookState, setBookState] = useState({
-    search: "",
+    search: '',
     books: [],
   });
 
@@ -48,7 +53,7 @@ const Home = () => {
 
   bookState.handleSaveBook = async (book) => {
     await axios
-      .post("/api/books", {
+      .post('/api/books', {
         title: book.volumeInfo.title,
         author: JSON.stringify(
           book.volumeInfo.authors && book.volumeInfo.authors[0]
@@ -72,26 +77,26 @@ const Home = () => {
 
   return (
     <>
-      <form className="home__searh__form" onSubmit={bookState.handleSearchBook}>
+      <form className='home__searh__form' onSubmit={bookState.handleSearchBook}>
         <TextField
-          label="Search Book Title"
-          name="search"
+          label='Search Book Title'
+          name='search'
           value={bookState.search}
           onChange={bookState.handleInputChange}
         />
         <Button
-          variant="outlined"
-          color="primary"
+          variant='outlined'
+          color='primary'
           onClick={bookState.handleSearchBook}
         >
           Search
         </Button>
       </form>
-      <section className="search_results">
-        {bookState.books.map((book,index) => (
+      <section className='search_results'>
+        {bookState.books.map((book, index) => (
           <Card className={classes.root} key={index}>
             <CardHeader
-              title={book.volumeInfo.title}
+              title={trimString(book.volumeInfo.title, 30)}
               subheader={`Written by ${
                 book.volumeInfo.authors &&
                 JSON.stringify(book.volumeInfo.authors[0])
@@ -99,7 +104,7 @@ const Home = () => {
             />
             <CardMedia
               style={{
-                backgroundSize: "auto",
+                backgroundSize: 'auto',
               }}
               className={classes.media}
               image={
@@ -110,15 +115,16 @@ const Home = () => {
             />
             <CardActions>
               <Button
-                size="small"
-                color="secondary"
+                size='small'
+                color='secondary'
                 onClick={() => bookState.handleSaveBook(book)}
               >
+                <Favorite />
                 Save
               </Button>
-              <Button size="small" color="secondary">
-                <Link href={book.volumeInfo.previewLink} target="_blank">
-                  View
+              <Button size='small' color='secondary'>
+                <Link href={book.volumeInfo.previewLink} target='_blank'>
+                  Preview
                 </Link>
               </Button>
             </CardActions>

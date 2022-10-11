@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { makeStyles } from "@material-ui/core/styles";
+import React, { useState, useEffect } from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import {
   Card,
   CardActions,
@@ -7,18 +7,19 @@ import {
   Button,
   CardHeader,
   Link,
-} from "@material-ui/core";
-import axios from "axios";
-import "./saved.css";
+} from '@material-ui/core';
+import { FavoriteBorder } from '@material-ui/icons';
+import axios from 'axios';
+import './saved.css';
 
 const useStyles = makeStyles({
   root: {
-    display: "flex",
-    margin: "10px 10px",
+    display: 'flex',
+    margin: '10px 10px',
   },
   media: {
-    width: "100%",
-    height: "20vh",
+    width: '100%',
+    height: '20vh',
   },
 });
 
@@ -31,12 +32,13 @@ const Saved = () => {
 
   useEffect(() => {
     axios
-      .get("/api/books")
+      .get('/api/books')
       .then(({ data }) => {
         setBookState({ ...bookState, books: data });
       })
       .catch((err) => console.error(err));
-  }, [bookState]);
+    console.log(bookState.books);
+  }, []);
 
   bookState.handleDeleteBook = async (book) => {
     await axios
@@ -52,40 +54,45 @@ const Saved = () => {
   };
 
   return (
-    <section className="search_results">
-      {bookState.books.map((book) => (
-        <Card className={classes.root}>
-          <CardHeader
-            title={book.title}
-            subheader={`Written by ${book.author}`}
-          />
-          <CardMedia
-            style={{
-              backgroundSize: "auto",
-            }}
-            className={classes.media}
-            image={book.image}
-            title={book.title}
-          />
-          <CardActions>
-            <Button
-              size="small"
-              color="secondary"
-              onClick={() => bookState.handleDeleteBook(book)}
-            >
-              UnSave
-            </Button>
-            <Button size="small" color="secondary">
-              <Link
-                href={book.volumeInfo && book.volumeInfo.previewLink}
-                target="_blank"
+    <section className='search_results'>
+      {bookState.books.length === 0 ? (
+        <h1>No Saved Books</h1>
+      ) : (
+        bookState.books.map((book) => (
+          <Card className={classes.root}>
+            <CardHeader
+              title={book.title}
+              subheader={`Written by ${book.author}`}
+            />
+            <CardMedia
+              style={{
+                backgroundSize: 'auto',
+              }}
+              className={classes.media}
+              image={book.image}
+              title={book.title}
+            />
+            <CardActions>
+              <Button
+                size='small'
+                color='secondary'
+                onClick={() => bookState.handleDeleteBook(book)}
               >
-                View
-              </Link>
-            </Button>
-          </CardActions>
-        </Card>
-      ))}
+                <FavoriteBorder />
+                UnSave
+              </Button>
+              <Button size='small' color='secondary'>
+                <Link
+                  href={book.volumeInfo && book.volumeInfo.previewLink}
+                  target='_blank'
+                >
+                  View
+                </Link>
+              </Button>
+            </CardActions>
+          </Card>
+        ))
+      )}
     </section>
   );
 };
