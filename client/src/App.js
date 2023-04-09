@@ -1,34 +1,20 @@
 import React from 'react';
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Saved from './pages/Saved';
-import { BookProvider } from './utils/GlobalState';
+import { UserProvider } from './utils/GlobalState';
 
-const App = () => {
+export default function App() {
   return (
     <Router>
-      <Navbar />
-      <Switch>
-        <Route exact path='/'>
-          <BookProvider>
-            <Home />
-          </BookProvider>
-        </Route>
-        <Route path='/saved'>
-          <BookProvider>
-            <Saved />
-          </BookProvider>
-        </Route>
-        <Redirect path='*' to='/' />
-      </Switch>
+      <UserProvider>
+        <Navbar />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/saved' element={<Saved />} />
+        </Routes>
+      </UserProvider>
     </Router>
   );
-};
-
-export default App;
+}

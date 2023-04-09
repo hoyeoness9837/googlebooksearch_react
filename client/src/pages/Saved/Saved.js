@@ -4,12 +4,11 @@ import {
   Card,
   CardActions,
   CardMedia,
-  Button,
   CardHeader,
-  Link,
+  IconButton,
 } from '@material-ui/core';
 import { FavoriteBorder } from '@material-ui/icons';
-import axios from 'axios';
+import { BookAPI } from '../../utils/BookAPI';
 import './saved.css';
 
 const useStyles = makeStyles({
@@ -25,73 +24,73 @@ const useStyles = makeStyles({
 
 const Saved = () => {
   const classes = useStyles();
-
-  const [bookState, setBookState] = useState({
-    books: [],
-  });
+  const [books, setBooks] = useState([]);
 
   useEffect(() => {
-    axios
-      .get('/api/books')
-      .then(({ data }) => {
-        setBookState({ ...bookState, books: data });
-      })
-      .catch((err) => console.error(err));
+    let isMounted = true;
+    const fetchBooks = async () => {
+      try {
+        const { data } = await BookAPI.read();
+        if (isMounted) {
+          setBooks(data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchBooks();
+    return () => {
+      isMounted = false;
+    };
   }, []);
 
-  bookState.handleDeleteBook = async (book) => {
-    await axios
-      .delete(`/api/books/${book._id}`)
-      .then(() => {
-        const books = JSON.parse(JSON.stringify(bookState.books));
-        const booksFiltered = books.filter(
-          (googleBook) => googleBook._id !== book._id
-        );
-        setBookState({ ...bookState, books: booksFiltered });
-      })
-      .catch((err) => console.error(err));
+  const handleDeleteBook = async (book) => {
+    try {
+      await BookAPI.delete(book._id);
+      const filteredBooks = books.filter((b) => b._id !== book._id);
+      setBooks(filteredBooks);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderBooks = () => {
+    return books.map((book) => (
+      <Card key={book._id} className={classes.root}>
+        <CardHeader
+          title={book.title}
+          subheader={`Written by ${book.author}`}
+        />
+        <CardMedia
+          style={{
+            backgroundSize: 'auto',
+          }}
+          className={classes.media}
+          image={book.image}
+          title={book.title}
+        />
+        <CardActions>
+          <IconButton
+            size='small'
+            color='secondary'
+            onClick={() => handleDeleteBook(book)}
+          >
+            <FavoriteBorder />
+            UnSave
+          </IconButton>
+          <IconButton size='small' color='secondary'>
+            <a href={book.link} target='_blank' rel='noopener noreferrer'>
+              <span>View</span>
+            </a>
+          </IconButton>
+        </CardActions>
+      </Card>
+    ));
   };
 
   return (
     <section className='search_results'>
-      {bookState.books.length === 0 ? (
-        <h1>No Saved Books</h1>
-      ) : (
-        bookState.books.map((book) => (
-          <Card className={classes.root}>
-            <CardHeader
-              title={book.title}
-              subheader={`Written by ${book.author}`}
-            />
-            <CardMedia
-              style={{
-                backgroundSize: 'auto',
-              }}
-              className={classes.media}
-              image={book.image}
-              title={book.title}
-            />
-            <CardActions>
-              <Button
-                size='small'
-                color='secondary'
-                onClick={() => bookState.handleDeleteBook(book)}
-              >
-                <FavoriteBorder />
-                UnSave
-              </Button>
-              <Button size='small' color='secondary'>
-                <Link
-                  href={book.volumeInfo && book.volumeInfo.previewLink}
-                  target='_blank'
-                >
-                  View
-                </Link>
-              </Button>
-            </CardActions>
-          </Card>
-        ))
-      )}
+      {books.length ? renderBooks() : <h1>No Saved Books</h1>}
     </section>
   );
 };

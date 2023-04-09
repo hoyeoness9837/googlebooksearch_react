@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
+  IconButton,
   Button,
   Card,
   CardHeader,
@@ -9,8 +10,8 @@ import {
   TextField,
   Link,
 } from '@material-ui/core';
-import { Favorite } from '@material-ui/icons';
-import axios from 'axios';
+import { Favorite, Search } from '@material-ui/icons';
+import { BookAPI } from '../../utils/BookAPI';
 import './home.css';
 
 const useStyles = makeStyles({
@@ -30,31 +31,28 @@ let trimString = function (string, length) {
 
 const Home = () => {
   const classes = useStyles();
-  const [bookState, setBookState] = useState({
-    search: '',
-    books: [],
-  });
+  const [search, setSearch] = useState('');
+  const [bookState, setBookState] = useState([]);
 
-  bookState.handleInputChange = (event) => {
-    setBookState({ ...bookState, [event.target.name]: event.target.value });
+  const handleInputChange = (event) => {
+    event.target.value && setSearch(event.target.value);
   };
 
-  bookState.handleSearchBook = async (event) => {
+  const handleSearchBook = async (event) => {
     event.preventDefault();
-    if (bookState.search.length > 0) {
-      await axios
-        .get(`/api/books/${bookState.search}`)
-        .then(({ data }) => {
-          setBookState({ ...bookState, books: data });
-        })
-        .catch((err) => console.error(err));
+    try {
+      const { data } = await BookAPI.search(search);
+      setBookState(data);
+    } catch (error) {
+      console.log(error);
     }
+    setSearch('');
   };
 
-  bookState.handleSaveBook = async (book) => {
-    await axios
-      .post('/api/books', {
-        title: book.volumeInfo.title,
+  const handleSaveBook = async (book) => {
+    try {
+      await BookAPI.create({
+        title: trimString(book.volumeInfo.title, 30),
         author: JSON.stringify(
           book.volumeInfo.authors && book.volumeInfo.authors[0]
         ),
@@ -63,74 +61,77 @@ const Home = () => {
           book.volumeInfo.imageLinks &&
           book.volumeInfo.imageLinks.smallThumbnail,
         link: book.volumeInfo.previewLink,
-        bookId: book.id,
-      })
-      .then(() => {
-        const books = bookState.books;
-        const booksFiltered = books.filter(
-          (googleBook) => googleBook.id !== book.id
-        );
-        setBookState({ ...bookState, books: booksFiltered });
-      })
-      .catch((err) => console.error(err));
+        id: book.id,
+      });
+      //make saved books disappear from search result to prevent users clicking save multiple times.
+      const booksNotSaved = bookState.filter(
+        (allBook) => allBook.id !== book.id
+      );
+      setBookState(booksNotSaved);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const renderBooks = () => {
+    return bookState.map((book) => (
+      <Card key={book.id} className={classes.root}>
+        <CardHeader
+          title={trimString(book.volumeInfo.title, 30)}
+          subheader={`Written by ${
+            book.volumeInfo.authors && book.volumeInfo.authors[0]
+          }`}
+        />
+        <CardMedia
+          key={book.etag}
+          style={{
+            backgroundSize: 'auto',
+          }}
+          className={classes.media}
+          image={
+            book.volumeInfo.imageLinks &&
+            book.volumeInfo.imageLinks.smallThumbnail
+          }
+          title={book.volumeInfo.title}
+        />
+        <CardActions>
+          <IconButton
+            size='small'
+            color='secondary'
+            onClick={() => handleSaveBook(book)}
+          >
+            <Favorite />
+            Save
+          </IconButton>
+          <IconButton size='small' color='secondary'>
+            <Link
+              href={book.volumeInfo.previewLink}
+              target='_blank'
+              rel='noopener noreferrer'
+            >
+              Preview
+            </Link>
+          </IconButton>
+        </CardActions>
+      </Card>
+    ));
   };
 
   return (
     <>
-      <form className='home__searh__form' onSubmit={bookState.handleSearchBook}>
+      <form className='home__searh__form' onSubmit={handleSearchBook}>
         <TextField
-          label='Search Book Title'
+          label='Search any books by title'
           name='search'
-          value={bookState.search}
-          onChange={bookState.handleInputChange}
+          value={search}
+          onChange={handleInputChange}
         />
-        <Button
-          variant='outlined'
-          color='primary'
-          onClick={bookState.handleSearchBook}
-        >
+        <Button variant='outlined' color='primary' onClick={handleSearchBook}>
+          <Search />
           Search
         </Button>
       </form>
-      <section className='search_results'>
-        {bookState.books.map((book, index) => (
-          <Card className={classes.root} key={index}>
-            <CardHeader
-              title={trimString(book.volumeInfo.title, 30)}
-              subheader={`Written by ${
-                book.volumeInfo.authors &&
-                JSON.stringify(book.volumeInfo.authors[0])
-              }`}
-            />
-            <CardMedia
-              style={{
-                backgroundSize: 'auto',
-              }}
-              className={classes.media}
-              image={
-                book.volumeInfo.imageLinks &&
-                book.volumeInfo.imageLinks.smallThumbnail
-              }
-              title={book.volumeInfo.title}
-            />
-            <CardActions>
-              <Button
-                size='small'
-                color='secondary'
-                onClick={() => bookState.handleSaveBook(book)}
-              >
-                <Favorite />
-                Save
-              </Button>
-              <Button size='small' color='secondary'>
-                <Link href={book.volumeInfo.previewLink} target='_blank'>
-                  Preview
-                </Link>
-              </Button>
-            </CardActions>
-          </Card>
-        ))}
-      </section>
+      <section className='search_results'>{renderBooks()}</section>
     </>
   );
 };

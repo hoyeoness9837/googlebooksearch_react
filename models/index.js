@@ -1,3 +1,3 @@
 module.exports = {
-  Gif: require('./Book.js')
-}
+  Book: require('./Book.js'),
+};

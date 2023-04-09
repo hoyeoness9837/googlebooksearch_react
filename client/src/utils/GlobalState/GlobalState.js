@@ -1,41 +1,70 @@
 import React, { createContext, useReducer, useContext } from 'react';
+import axios from 'axios';
 
-const BookContext = createContext({
-  items: [],
+const UserContext = createContext({
+  user: null,
+  loading: true,
+  error: null,
 });
 
-const BookProvider = ({ value, ...props }) => {
-  const [state, dispatch] = useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case 'CREATE_ITEM':
-          let items = JSON.parse(JSON.stringify(state.items));
-          items.push(action.item);
-          return { ...state, items };
-        case 'UPDATE_ITEM':
-          let updatedItems = JSON.parse(JSON.stringify(state.items));
-          updatedItems.forEach((item) => {
-            if (item._id === action.id) {
-              item.isDone = !action.isDone;
-            }
-          });
-          return { ...state, items: updatedItems };
-        case 'DELETE_ITEM':
-          let deletedItems = JSON.parse(JSON.stringify(state.items));
-          deletedItems = deletedItems.filter((item) => item._id !== action.id);
-          return { ...state, items: deletedItems };
-        case 'GET_ITEMS':
-          return { ...state, items: action.items };
-        default:
-          return state;
-      }
-    },
-    { items: [] }
-  );
-
-  return <BookContext.Provider value={[state, dispatch]} {...props} />;
+const userReducer = (state, action) => {
+  switch (action.type) {
+    case 'SET_USER': {
+      return { ...state, user: action.user, loading: false };
+    }
+    case 'SET_ERROR': {
+      return { ...state, error: action.error, loading: false };
+    }
+    case 'LOGOUT': {
+      return { ...state, user: null, loading: false };
+    }
+    default: {
+      return state;
+    }
+  }
 };
 
-const useBookContext = () => useContext(BookContext);
+const UserProvider = ({ children }) => {
+  const [state, dispatch] = useReducer(userReducer, {
+    user: null,
+    loading: true,
+    error: null,
+  });
 
-export { BookProvider, useBookContext };
+  const signUp = async (username, password) => {
+    try {
+      const res = await axios.post('/api/signup', { username, password });
+      const { user } = res.data;
+      dispatch({ type: 'SET_USER', user });
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', error });
+    }
+  };
+
+  const login = async (username, password) => {
+    try {
+      const res = await axios.post('/api/login', { username, password });
+      const { user } = res.data;
+      dispatch({ type: 'SET_USER', user });
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', error });
+    }
+  };
+
+  const logout = async () => {
+    try {
+      await axios.post('/api/logout');
+      dispatch({ type: 'LOGOUT' });
+    } catch (error) {
+      dispatch({ type: 'SET_ERROR', error });
+    }
+  };
+
+  const value = { state, signUp, login, logout };
+
+  return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
+};
+
+const useUserContext = () => useContext(UserContext);
+
+export { UserProvider, useUserContext };
