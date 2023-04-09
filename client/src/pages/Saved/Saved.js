@@ -37,7 +37,6 @@ const Saved = () => {
         setBookState({ ...bookState, books: data });
       })
       .catch((err) => console.error(err));
-    console.log(bookState.books);
   }, []);
 
   bookState.handleDeleteBook = async (book) => {
