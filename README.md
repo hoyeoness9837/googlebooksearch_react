@@ -5,10 +5,10 @@
 ![DEMO](./client/public/assets/demo.gif)
 
 ## Installation
-- Go to the following deployed link and enjoy this app! or clone the code from the repository and start it with type in 'npm install' in the root terminal.
+- Go to the following deployed link and enjoy this app! or clone the code from the repository and start it with type in 'npm install' in the root terminal. then start app with 'npm start'
 
 ## Deployed URL by Heroku
-- [https://hyk-googlebookapp.herokuapp.com/](https://hyk-googlebookapp.herokuapp.com/)
+- [https://react-booksearch-google.herokuapp.com/](https://react-booksearch-google.herokuapp.com/)
 
 ## Technologies Included
 - HTML, CSS, JavaScript
