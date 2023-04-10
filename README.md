@@ -8,7 +8,9 @@
 - Go to the following deployed link and enjoy this app! or clone the code from the repository and start it with type in 'npm install' in the root terminal. then start app with 'npm start'
 
 ## Deployed URL by Heroku
+- WARNING! Heroku currently doesn't provide free dynos subscripton. The following URL won't open app.
 - [https://react-booksearch-google.herokuapp.com/](https://react-booksearch-google.herokuapp.com/)
+- Instead, I decided to merge Next.js in this application and will deploy it via Vercel.
 
 ## Technologies Included
 - HTML, CSS, JavaScript
