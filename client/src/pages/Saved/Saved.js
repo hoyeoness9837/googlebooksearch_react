@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import {
-  Card,
-  CardActions,
-  CardMedia,
-  CardHeader,
-  IconButton,
-} from '@material-ui/core';
+import { Card, CardActions, CardMedia, CardHeader } from '@material-ui/core';
 import { FavoriteBorder } from '@material-ui/icons';
+import BookActionButton from '../../components/BookActionButton';
 import { BookAPI } from '../../utils/BookAPI';
 import './saved.css';
 
@@ -70,19 +65,19 @@ const Saved = () => {
           title={book.title}
         />
         <CardActions>
-          <IconButton
+          <BookActionButton
             size='small'
             color='secondary'
             onClick={() => handleDeleteBook(book)}
           >
             <FavoriteBorder />
             UnSave
-          </IconButton>
-          <IconButton size='small' color='secondary'>
+          </BookActionButton>
+          <BookActionButton size='small' color='secondary'>
             <a href={book.link} target='_blank' rel='noopener noreferrer'>
               <span>View</span>
             </a>
-          </IconButton>
+          </BookActionButton>
         </CardActions>
       </Card>
     ));

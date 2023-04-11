@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  IconButton,
   Button,
   Card,
   CardHeader,
@@ -11,6 +10,7 @@ import {
   Link,
 } from '@material-ui/core';
 import { Favorite, Search } from '@material-ui/icons';
+import BookActionButton from '../../components/BookActionButton';
 import { BookAPI } from '../../utils/BookAPI';
 import './home.css';
 
@@ -95,15 +95,15 @@ const Home = () => {
           title={book.volumeInfo.title}
         />
         <CardActions>
-          <IconButton
+          <BookActionButton
             size='small'
             color='secondary'
             onClick={() => handleSaveBook(book)}
           >
             <Favorite />
             Save
-          </IconButton>
-          <IconButton size='small' color='secondary'>
+          </BookActionButton>
+          <BookActionButton size='small' color='secondary'>
             <Link
               href={book.volumeInfo.previewLink}
               target='_blank'
@@ -111,7 +111,7 @@ const Home = () => {
             >
               Preview
             </Link>
-          </IconButton>
+          </BookActionButton>
         </CardActions>
       </Card>
     ));

@@ -13,7 +13,7 @@ app.use(require('./routes'));
 
 // Connect to mongodb
 const URI =
-  process.env.REACT_APP_MONGODB_URI || process.env.REACT_APP_LOCALDB_URI;
+  process.env.REACT_APP_MONGODB_URI || process.env.local.REACT_APP_LOCALDB_URI;
 mongoose.connect(URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
