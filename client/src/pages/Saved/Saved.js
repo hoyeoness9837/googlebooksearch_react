@@ -54,7 +54,7 @@ const Saved = () => {
       <Card key={book._id} className={classes.root}>
         <CardHeader
           title={book.title}
-          subheader={`Written by ${book.author}`}
+          subheader={book.author}
         />
         <CardMedia
           style={{

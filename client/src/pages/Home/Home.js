@@ -50,17 +50,15 @@ const Home = () => {
   };
 
   const handleSaveBook = async (book) => {
+    const { title, authors, description, imageLinks, previewLink } =
+      book.volumeInfo;
     try {
       await BookAPI.create({
-        title: trimString(book.volumeInfo.title, 30),
-        author: JSON.stringify(
-          book.volumeInfo.authors && book.volumeInfo.authors[0]
-        ),
-        description: book.volumeInfo.description,
-        image:
-          book.volumeInfo.imageLinks &&
-          book.volumeInfo.imageLinks.smallThumbnail,
-        link: book.volumeInfo.previewLink,
+        title: trimString(title, 30),
+        author: trimString(`Written by ${authors?.join(', ')}`, 30),
+        description: description,
+        imageLinks: imageLinks?.smallThumbnail,
+        link: previewLink,
         id: book.id,
       });
       //make saved books disappear from search result to prevent users clicking save multiple times.
@@ -78,9 +76,7 @@ const Home = () => {
       <Card key={book.id} className={classes.root}>
         <CardHeader
           title={trimString(book.volumeInfo.title, 30)}
-          subheader={`Written by ${
-            book.volumeInfo.authors && book.volumeInfo.authors[0]
-          }`}
+          subheader={`Written by ${book.volumeInfo.authors?.join(', ')}`}
         />
         <CardMedia
           key={book.etag}
@@ -88,10 +84,7 @@ const Home = () => {
             backgroundSize: 'auto',
           }}
           className={classes.media}
-          image={
-            book.volumeInfo.imageLinks &&
-            book.volumeInfo.imageLinks.smallThumbnail
-          }
+          image={book.volumeInfo.imageLinks?.smallThumbnail}
           title={book.volumeInfo.title}
         />
         <CardActions>
